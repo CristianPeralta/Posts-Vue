@@ -1,4 +1,4 @@
-# posts-vue
+# Posts-Vue
 
 > posts and comments
 
