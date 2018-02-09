@@ -1,17 +1,26 @@
 <template lang="html">
-  <div class="posts">
+  <div class="container">
     <h1>Posts</h1>
     <div>
-      <button type="button" class="blue-btn" name="button"><router-link v-bind:to="{ name: 'NewPost' }" class="blue-btn">New</router-link></button>
-
+      <button type="button" class="btn btn-dark" name="button"><router-link v-bind:to="{ name: 'NewPost' }">New</router-link></button>
      </div>
-    <div v-for="(post,index) in posts" :key="index">
-        <p>
-          <span><b>{{ post.title }}</b></span> :
-          <span>{{ post.description }}</span>
-        </p>
-    </div>
     <new-post></new-post>
+    <ul class="list-group tasks" v-for="post in posts" :key="post._id">
+        <li class="list-group-item">
+
+          <span><b>{{ post.title }}</b></span> : <span class="description">{{ post.description }}</span>
+          <div>
+            <a>
+                <span class="glyphicon glyphicon-edit"
+                      aria-hidden="true"></span>
+            </a>
+            <a>
+                <span @click="deletePost(post._id)" class="glyphicon glyphicon-trash"
+                      aria-hidden="true"></span>
+            </a>
+          </div>
+        </li>
+    </ul>
   </div>
 </template>
 
@@ -36,6 +45,14 @@ export default {
       }).catch(err => {
         console.log(err)
       })
+    },
+    deletePost (id) {
+      console.log('remove this :' + id)
+      PostsServices.deletePost(id).then(response => {
+        this.$router.go()
+      }).catch(err => {
+        console.log(err)
+      })
     }
   },
   components: {
@@ -45,15 +62,5 @@ export default {
 </script>
 
 <style lang="css">
-.blue-btn {
-  background: #4d7ef7;
-  color: #fff;
-  padding: 10px 80px;
-  text-transform: uppercase;
-  font-size: 12px;
-  font-weight: bold;
-  width: 520px;
-  border: none;
-  cursor: pointer;
-}
+@import '../assets/css/task.css';
 </style>

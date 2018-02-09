@@ -6,5 +6,8 @@ export default {
   },
   addPost (params) {
     return Api().post('posts', params)
+  },
+  deletePost (id) {
+    return Api().delete('post/' + id)
   }
 }
