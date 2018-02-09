@@ -4,9 +4,15 @@ var favicon = require('serve-favicon');
 var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
+var mongoose = require('mongoose');
 
 var index = require('./routes/index');
 var users = require('./routes/users');
+
+mongoose.connect('mongodb://localhost:27017/PostsDB', function(err, res) {
+  if(err) throw err;
+  console.log('Successful connection to database PostsDB');
+});
 
 var app = express();
 

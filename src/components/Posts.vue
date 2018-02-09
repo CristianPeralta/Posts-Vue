@@ -11,10 +11,10 @@
 </template>
 
 <script>
-import PostsService from '@/services/PostsServices'
+import PostsServices from '@/services/PostsServices'
 
 export default {
-  name: 'posts',
+  name: 'Posts',
   data () {
     return {
       posts: []
@@ -25,7 +25,7 @@ export default {
   },
   methods: {
     async getPosts () {
-      PostsService.fetchPosts().then(response => {
+      PostsServices.fetchPosts().then(response => {
         this.posts = response.data
       }).catch(err => {
         console.log(err)

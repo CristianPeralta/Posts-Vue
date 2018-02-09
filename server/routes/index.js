@@ -1,14 +1,10 @@
 var express = require('express');
 var router = express.Router();
 
+var postController = require('../controllers/postController');
+
 /* GET home page. */
-router.get('/posts', function(req, res, next) {
-  res.send(
-    [{
-      title: "Hello World!",
-      description: "Hi there! How are you?"
-    }]
-  )
-});
+router.get('/posts', postController.getPosts);
+router.post('/posts', postController.addPost);
 
 module.exports = router;
