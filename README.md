@@ -2,6 +2,11 @@
 
 > posts and comments
 
+## Possible Issue with connection between domains
+Error “No 'Access-Control-Allow-Origin' header is present on the requested resource” when consume Api services
+
+So install extension Chrome to fix it => https://chrome.google.com/webstore/detail/allow-control-allow-origi/nlfbmbojpeacfghkpbjhddihlkkiljbi
+
 ## Build Setup
 
 ``` bash

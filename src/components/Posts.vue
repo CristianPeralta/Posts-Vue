@@ -17,8 +17,7 @@ export default {
   name: 'posts',
   data () {
     return {
-      posts: [],
-      postlength: 0
+      posts: []
     }
   },
   mounted () {
@@ -28,6 +27,8 @@ export default {
     async getPosts () {
       PostsService.fetchPosts().then(response => {
         this.posts = response.data
+      }).catch(err => {
+        console.log(err)
       })
     }
   }
