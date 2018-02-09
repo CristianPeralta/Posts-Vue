@@ -22,7 +22,7 @@ module.exports.addPost = function (req,res) {
 
 module.exports.updatePost = function (req,res) {
   var data = req.body;
-  Post.findOne({_id:data.id},function (err,post) {
+  Post.findOne({_id:data._id},function (err,post) {
     if(err) return res.status(500).send(err);
     if (!post) return res.status(404).send(err);
     post.title = data.title;

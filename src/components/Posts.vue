@@ -5,8 +5,8 @@
       <button type="button" class="btn btn-dark" name="button"><router-link v-bind:to="{ name: 'NewPost' }">New</router-link></button>
      </div>
     <new-post></new-post>
-    <ul class="list-group tasks" v-for="post in posts" :key="post._id">
-        <li class="list-group-item">
+    <ul class="list-group tasks">
+        <li v-for="post in posts" :key="post._id" class="list-group-item">
           <template v-if="!post.editing">
             <span><b>{{ post.title }}</b></span> : <span class="description">{{ post.description }}</span>
             <div>
@@ -26,11 +26,11 @@
             <div>
 
               <a>
-                  <span @click="updatePost(post._id)" class="glyphicon glyphicon-ok"
+                  <span @click="updatePost(post)" class="glyphicon glyphicon-ok"
                         aria-hidden="true"></span>
               </a>
               <a>
-                  <span @click="cancelPost(post._id)" class="glyphicon glyphicon-remove"
+                  <span @click="cancelPost(post)" class="glyphicon glyphicon-remove"
                         aria-hidden="true"></span>
               </a>
             </div>
@@ -68,6 +68,9 @@ export default {
         console.log(err)
       })
     },
+    checkEdit (post) {
+      return post.editing
+    },
     editPost (post) {
       this.posts.forEach(function (post) {
         post.editing = false
@@ -77,12 +80,24 @@ export default {
       post.editing = true
       console.log(post)
     },
+    updatePost (post) {
+      post.title = this.titleDraft
+      post.description = this.descriptionDraft
+      PostsServices.updatePost(post).then(() => {
+        post.editing = false
+      }).catch(err => {
+        console.log(err)
+      })
+    },
     deletePost (id) {
       PostsServices.deletePost(id).then(response => {
         this.$router.go()
       }).catch(err => {
         console.log(err)
       })
+    },
+    cancelPost (post) {
+      post.editing = false
     }
   },
   components: {
