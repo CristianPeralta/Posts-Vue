@@ -3,7 +3,6 @@ var Post = require('../models/Post');
 module.exports.getPosts = function (req,res) {
   Post.find({},function (err,posts) {
     if(err) return res.json(503);
-
     return res.json(posts);
   }).sort({_id:-1})
 }

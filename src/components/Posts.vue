@@ -8,9 +8,8 @@
     <ul class="list-group tasks">
         <li v-for="post in posts" :key="post._id" class="list-group-item">
           <template v-if="!post.editing">
-            <span><b>{{ post.title }}</b></span> : <span class="description">{{ post.description }}</span>
+              <span><b>{{ post.title }}</b></span> : <span class="description">{{ post.description }}</span>
             <div>
-
               <a>
                   <span @click="editPost(post)" class="glyphicon glyphicon-edit"
                         aria-hidden="true"></span>
@@ -22,11 +21,12 @@
             </div>
           </template>
           <template v-if="post.editing">
-            <input v-model="titleDraft" type="text"> : <input v-model="descriptionDraft" type="text">
             <div>
-
+              <input v-model="titleDraft" type="text"> : <input v-model="descriptionDraft" type="text">
+            </div>
+            <div>
               <a>
-                  <span @click="updatePost(post)" class="glyphicon glyphicon-ok"
+                  <span v-if="isEmpty(titleDraft)" @click="updatePost(post)" class="glyphicon glyphicon-ok"
                         aria-hidden="true"></span>
               </a>
               <a>
@@ -54,22 +54,19 @@ export default {
       descriptionDraft: ''
     }
   },
-  mounted () {
+  created () {
     this.getPosts()
   },
   methods: {
-    async getPosts () {
+    getPosts () {
       PostsServices.fetchPosts().then(response => {
-        this.posts = response.data
-        this.posts.map(function (post) {
-          post['editing'] = false
+        response.data.map(function (post) {
+          post.editing = false
         })
+        this.posts = response.data
       }).catch(err => {
         console.log(err)
       })
-    },
-    checkEdit (post) {
-      return post.editing
     },
     editPost (post) {
       this.posts.forEach(function (post) {
@@ -86,6 +83,7 @@ export default {
       PostsServices.updatePost(post).then(() => {
         post.editing = false
       }).catch(err => {
+        post.editing = false
         console.log(err)
       })
     },
@@ -97,7 +95,12 @@ export default {
       })
     },
     cancelPost (post) {
-      post.editing = false
+      post.editing = !post.editing
+      this.titleDraft = ''
+      this.descriptionDraft = ''
+    },
+    isEmpty (str) {
+      return str.replace(/^\s+/g, '').length
     }
   },
   components: {
