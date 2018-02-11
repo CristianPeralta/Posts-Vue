@@ -17,7 +17,7 @@
           </div>
           <div id="navbarMenuHeroA" class="navbar-menu">
             <div class="navbar-end">
-              <router-link  class="navbar-item is-active" to="/posts" exact>
+              <router-link  class="navbar-item" to="/posts" exact>
                 <a>Home</a>
               </router-link>
               <router-link class="navbar-item" v-bind:to="{ name: 'NewPost' }">New</router-link>

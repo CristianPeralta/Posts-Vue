@@ -30,5 +30,6 @@ export default new Router({
       component: PostTwo
     }
 
-  ]
+  ],
+  linkActiveClass: 'is-active'
 })
