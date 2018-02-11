@@ -1,23 +1,13 @@
 <template>
   <div class="">
     <div class="form">
-      <form @submit.prevent="onSubmit" @keydown="form.errors.clear()">
-
-        <div class="control">
-          <input type="text" name="title" placeholder="Title" v-model="form.title">
-        </div>
-        <span class="help is-danger"
-            v-if="form.errors.has('title')"
-            v-text="form.errors.get('title')"></span>
-        <div class="control">
-          <textarea rows="5" cols="15" placeholder="Description" v-model="form.description"></textarea>
-        </div>
-        <span class="help is-danger"
-            v-if="form.errors.has('description')"
-            v-text="form.errors.get('description')"></span>
-        <p class="control">
-          <button class="button is-primary app_post_btn" :disabled="form.errors.any()">Submit</button>
-        </p>
+      <form class="new-task-form" @submit.prevent="onSubmit" @keydown="form.errors.clear()">
+        <textarea rows="2" cols="5" placeholder="Title" v-model="form.title"></textarea>
+        <textarea rows="2" cols="5" placeholder="Description" v-model="form.description"></textarea>
+          <span class="help is-danger"
+          v-if="form.errors.has('title')"
+          v-text="form.errors.get('title')"></span>
+        <button class="btn btn-primary" :disabled="form.errors.any()">Submit</button>
       </form>
     </div>
   </div>

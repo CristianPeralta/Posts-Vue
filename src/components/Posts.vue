@@ -1,9 +1,9 @@
 <template >
   <div class="container">
     <h1>Posts</h1>
-    <div>
+    <!-- <div>
       <button type="button" class="btn btn-dark" name="button"><router-link v-bind:to="{ name: 'NewPost' }">New</router-link></button>
-     </div>
+     </div> -->
     <new-post></new-post>
     <ul class="list-group tasks">
         <li v-for="post in posts" :key="post._id" class="list-group-item">
@@ -75,7 +75,6 @@ export default {
       this.titleDraft = post.title
       this.descriptionDraft = post.description
       post.editing = true
-      console.log(post)
     },
     updatePost (post) {
       post.title = this.titleDraft
