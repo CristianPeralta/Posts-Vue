@@ -9,7 +9,13 @@ var mongoose = require('mongoose');
 var index = require('./routes/index');
 var users = require('./routes/users');
 
-mongoose.connect('mongodb://localhost:27017/PostsDB', function(err, res) {
+const cdb = {
+  host : 'localhost',
+  port : '27017',
+  db : 'PostsDB'
+};
+
+mongoose.connect("mongodb://"+cdb.host+":"+cdb.port+"/"+cdb.db, function(err, res) {
   if(err) throw err;
   console.log('Successful connection to database PostsDB');
 });
