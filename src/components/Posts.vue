@@ -1,9 +1,6 @@
-<template >
+<template>
   <div class="container">
     <h1>Posts</h1>
-    <!-- <div>
-      <button type="button" class="btn btn-dark" name="button"><router-link v-bind:to="{ name: 'NewPost' }">New</router-link></button>
-     </div> -->
     <new-post></new-post>
     <ul class="list-group tasks">
         <li v-for="post in posts" :key="post._id" class="list-group-item">
