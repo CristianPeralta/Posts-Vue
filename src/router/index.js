@@ -4,6 +4,7 @@ import HelloWorld from '@/components/HelloWorld'
 import Posts from '@/components/Posts'
 import NewPost from '@/components/NewPost'
 import PostTwo from '@/components/PostTwo'
+import PostsSocket from '@/components/PostSocket'
 
 Vue.use(Router)
 
@@ -28,6 +29,11 @@ export default new Router({
       path: '/posts/two',
       name: 'PostTwo',
       component: PostTwo
+    },
+    {
+      path: '/posts/socket',
+      name: 'PostsSocket',
+      component: PostsSocket
     }
 
   ],

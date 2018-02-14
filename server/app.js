@@ -5,9 +5,11 @@ var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var mongoose = require('mongoose');
+var http = require('http');
 
 var index = require('./routes/index');
 var users = require('./routes/users');
+var port = '3000';
 
 const cdb = {
   host : 'localhost',
@@ -21,7 +23,15 @@ mongoose.connect("mongodb://"+cdb.host+":"+cdb.port+"/"+cdb.db, function(err, re
 });
 
 var app = express();
+var server = http.createServer(app);
+var io = require('../node_modules/socket.io')(server);
 
+io.on('connection',function (socket) {
+  console.log('Someone has connected with sockts');
+});
+server.listen(port,function() {
+  console.log('Listening in port '+port);
+});
 // view engine setup
 // app.set('views', path.join(__dirname, 'views'));
 // app.set('view engine', 'jade');
