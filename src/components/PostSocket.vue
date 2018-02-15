@@ -41,6 +41,8 @@
 <script>
 import PostsServices from '@/services/PostsServices'
 import postTwo from '@/components/PostTwo.vue'
+import Vue from 'vue'
+import VueSocketio from 'vue-socket.io'
 
 export default {
   name: 'PostsSocket',
@@ -51,15 +53,21 @@ export default {
       descriptionDraft: ''
     }
   },
-  mounted () {
-    let cdn = document.createElement('script')
-    cdn.setAttribute('src', 'https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.0.4/socket.io.js')
-    document.head.appendChild(cdn)
+  sockets: {
+    connect () {
+      console.log('socket connected')
+    },
+    customEmit (val) {
+      console.log('this method was fired by the socket server. eg: io.emit("customEmit", data)')
+    }
   },
   created () {
+    Vue.use(VueSocketio, 'http://localhost:3000')
     this.getPosts()
   },
   methods: {
+    init (port) {
+    },
     getPosts () {
       PostsServices.fetchPosts().then(response => {
         response.data.map(function (post) {

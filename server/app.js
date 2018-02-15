@@ -6,10 +6,11 @@ var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var mongoose = require('mongoose');
 var http = require('http');
-
+var app = express();
+var server = app.listen(3000);
+var io = require('socket.io').listen(server);
 var index = require('./routes/index');
 var users = require('./routes/users');
-var port = '3000';
 
 const cdb = {
   host : 'localhost',
@@ -21,16 +22,11 @@ mongoose.connect("mongodb://"+cdb.host+":"+cdb.port+"/"+cdb.db, function(err, re
   if(err) throw err;
   console.log('Successful connection to database PostsDB');
 });
-
-var app = express();
-var server = http.createServer(app);
-var io = require('../node_modules/socket.io')(server);
-
-io.on('connection',function (socket) {
-  console.log('Someone has connected with sockts');
-});
-server.listen(port,function() {
-  console.log('Listening in port '+port);
+io.on('connection', function(socket) {
+	console.log('Un cliente se ha conectado');
+  socket.on('disconnect', function(){
+          console.log(' has disconnected'); //disconnecting automatically removes the socket from the room.
+    });
 });
 // view engine setup
 // app.set('views', path.join(__dirname, 'views'));
