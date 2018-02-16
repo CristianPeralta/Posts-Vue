@@ -81,7 +81,6 @@ export default {
       this.$socket.emit('editing', {great: 'Wow'})
     },
     vueServer () {
-      console.log('exist')
       this.$socket.emit('vueServer', {great: 'Wow'})
     },
     getPosts () {
