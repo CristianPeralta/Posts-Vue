@@ -19,22 +19,27 @@ const cdb = {
   db : 'PostsDB'
 };
 
+//var socketExt = io.connect('https://localhost:8080');
+
 mongoose.connect("mongodb://"+cdb.host+":"+cdb.port+"/"+cdb.db, function(err, res) {
   if(err) throw err;
   console.log('Successful connection to database PostsDB');
 });
-io.on('connect', function(socket) {
+io.on('connection', function(socket) {
 	console.log('Un cliente se ha conectado');
+  socket.on('vueServer', function(data) {
+        console.log('vue -server : '+ data.great);
+        socket.emit('other','YEI');
+      });
   socket.on('editing', function(data) {
-        console.log('editing SOCKET');
-        socket.emit("customEmit", {connect:true});
-        socket.emit('connect');
-  });
+        console.log('editing with SOCKET : '+ data.great);
+        socket.emit('messages','WOW');
+      });
+
   socket.on('disconnect', function(){
           console.log(' has disconnected'); //disconnecting automatically removes the socket from the room.
-  });
+    });
 });
-
 // view engine setup
 // app.set('views', path.join(__dirname, 'views'));
 // app.set('view engine', 'jade');
