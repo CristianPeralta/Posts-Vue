@@ -5,6 +5,7 @@ var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var mongoose = require('mongoose');
+var cors = require('cors');
 var http = require('http');
 var app = express();
 var server = app.listen(3000);
@@ -22,18 +23,25 @@ mongoose.connect("mongodb://"+cdb.host+":"+cdb.port+"/"+cdb.db, function(err, re
   if(err) throw err;
   console.log('Successful connection to database PostsDB');
 });
-io.on('connection', function(socket) {
+io.on('connect', function(socket) {
 	console.log('Un cliente se ha conectado');
+  socket.on('editing', function(data) {
+        console.log('editing SOCKET');
+        socket.emit("customEmit", {connect:true});
+        socket.emit('connect');
+  });
   socket.on('disconnect', function(){
           console.log(' has disconnected'); //disconnecting automatically removes the socket from the room.
-    });
+  });
 });
+
 // view engine setup
 // app.set('views', path.join(__dirname, 'views'));
 // app.set('view engine', 'jade');
 
 // uncomment after placing your favicon in /public
 //app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
+app.use(cors({origin:true,credentials: true}));
 app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));

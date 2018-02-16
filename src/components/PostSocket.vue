@@ -1,6 +1,8 @@
 <template>
   <div class="container">
     <h1>Posts</h1>
+    <button class="btn btn-primary" @click="haiServer()" type="button" name="button">Hello Server</button>
+    <br>
     <new-post></new-post>
     <ul class="list-group tasks">
         <li v-for="post in posts" :key="post._id" class="list-group-item">
@@ -59,14 +61,20 @@ export default {
     },
     customEmit (val) {
       console.log('this method was fired by the socket server. eg: io.emit("customEmit", data)')
+    },
+    messages (data) {
+      alert(data)
     }
   },
-  created () {
+  mounted () {
     Vue.use(VueSocketio, 'http://localhost:3000')
+  },
+  created () {
     this.getPosts()
   },
   methods: {
-    init (port) {
+    haiServer () {
+      this.$socket.emit('editing', {great: 'Wow'})
     },
     getPosts () {
       PostsServices.fetchPosts().then(response => {
@@ -90,6 +98,7 @@ export default {
       post.title = this.titleDraft
       post.description = this.descriptionDraft
       PostsServices.updatePost(post).then(() => {
+        this.$socket.emit('editing', post)
         post.editing = false
       }).catch(err => {
         post.editing = false
