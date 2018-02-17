@@ -31,10 +31,19 @@ io.on('connection', function(socket) {
         console.log('vue -server : '+ data.great);
         socket.emit('other','YEI');
       });
+  socket.on('deleting', function(data) {
+        console.log('deleting with SOCKET : '+ data.great);
+        socket.emit('messages','WOW');
+      });
+  socket.on('getting', function(data) {
+        console.log('getting with SOCKET : '+ data.great);
+        socket.emit('messages','WOW');
+      });
   socket.on('editing', function(data) {
         console.log('editing with SOCKET : '+ data.great);
         socket.emit('messages','WOW');
       });
+
 
   socket.on('disconnect', function(){
           console.log(' has disconnected'); //disconnecting automatically removes the socket from the room.

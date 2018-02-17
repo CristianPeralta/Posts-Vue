@@ -85,6 +85,7 @@ export default {
     },
     getPosts () {
       PostsServices.fetchPosts().then(response => {
+        this.$socket.emit('getting', {great: 'Wow'})
         response.data.map(function (post) {
           post.editing = false
         })
@@ -114,6 +115,7 @@ export default {
     },
     deletePost (id) {
       PostsServices.deletePost(id).then(response => {
+        this.$socket.emit('deleting', id)
         this.$router.go()
       }).catch(err => {
         console.log(err)
