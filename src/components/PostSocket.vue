@@ -3,8 +3,17 @@
     <h1>Posts</h1>
     <button class="btn btn-primary" @click="haiServer()" type="button" name="button">Hello Server</button>
     <br>
-    <new-post></new-post>
     <ul class="list-group tasks">
+      <li class="list-group-item">
+            <input type="text" placeholder="Title" v-model="title" >
+            <input type="text" placeholder="Description" v-model="description">
+            <div class="">
+              <a>
+                  <span @click="addPost()"
+                        aria-hidden="true">Add</span>
+              </a>
+            </div>
+      </li>
         <li v-for="(post,index) in posts" :key="post._id" class="list-group-item">
           <template v-if="!post.editing">
               <span><b>{{ post.title }}</b></span> : <span class="description">{{ post.description }}</span>
@@ -41,7 +50,6 @@
 </template>
 
 <script>
-import postTwo from '@/components/PostTwo.vue'
 import Vue from 'vue'
 import VueSocketio from 'vue-socket.io'
 Vue.use(VueSocketio, 'ws://localhost:3000')
@@ -50,6 +58,8 @@ export default {
   name: 'PostsSocket',
   data () {
     return {
+      title: '',
+      description: '',
       posts: [],
       titleDraft: '',
       descriptionDraft: ''
@@ -64,6 +74,16 @@ export default {
     },
     message (data) {
       console.log(data)
+    },
+    postAdded (response) {
+      if (response.ok) {
+        response.data.editing = false
+        this.posts.unshift(response.data)
+        this.title = ''
+        this.description = ''
+      } else {
+        console.log(response.err)
+      }
     },
     postUpdated (response) {
       let post = this.posts[response.index]
@@ -98,6 +118,13 @@ export default {
     haiServer () {
       this.$socket.emit('hai', {great: 'Wow'})
     },
+    addPost () {
+      let data = {
+        title: this.title,
+        description: this.description
+      }
+      this.$socket.emit('addPost', data)
+    },
     getPosts () {
       this.$socket.emit('getPosts')
     },
@@ -126,13 +153,30 @@ export default {
     isEmpty (str) {
       return str.replace(/^\s+/g, '').length
     }
-  },
-  components: {
-    'new-post': postTwo
   }
 }
 </script>
 
 <style lang="css">
 @import '../assets/css/task.css';
+.form input, .form textarea{
+  width: 200px;
+  padding: 10px;
+  border: 1px solid #e0dede;
+  outline: none;
+  font-size: 12px;
+}
+.form div {
+  margin: 20px;
+}
+.post_btn {
+  color: #fff;
+  padding: 10px;
+  font-size: 12px;
+  font-weight: bold;
+  width: 50px;
+  border: none;
+  outline: none;
+  cursor: pointer;
+}
 </style>

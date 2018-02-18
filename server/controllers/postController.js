@@ -25,6 +25,13 @@ module.exports.addPost = function (req,res) {
   })
 }
 
+module.exports.addPostSocket = function (data, cb) {
+  var newPost = new Post(data);
+  newPost.save(function (err,post) {
+    return cb(post, err);
+  })
+}
+
 module.exports.updatePost = function (req,res) {
   var data = req.body;
   Post.findOne({_id:data._id},function (err,post) {
@@ -66,10 +73,10 @@ module.exports.deletePost = function (req,res) {
 
 module.exports.deletePostSocket = function (id, cb) {
   Post.findOne({_id:id},function (err,post) {
-    if(err) return cb(post, err);
-    if (!post) return cb(post, err);
+    if(err) return cb(err);
+    if (!post) return cb(err);
     post.remove(function (err) {
-      return cb(post, err);
+      return cb(err);
     })
   })
 }

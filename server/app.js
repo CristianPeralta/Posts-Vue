@@ -37,8 +37,14 @@ io.on('connection', function(socket) {
         socket.emit('message', 'Server Connected');
       });
 
+  socket.on('addPost', function(data) {
+        postController.addPostSocket(data, function (post, err) {
+          socket.emit('postAdded', {data:post,ok:!err,err:err});
+        })
+      });
+
   socket.on('deletePost', function(id, idx) {
-        postController.deletePostSocket(id, function (posts, err) {
+        postController.deletePostSocket(id, function (err) {
           socket.emit('postDeleted', {index:idx,ok:!err,err:err});
         })
       });
