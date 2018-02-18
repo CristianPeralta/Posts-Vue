@@ -30,10 +30,6 @@ mongoose.connect("mongodb://"+cdb.host+":"+cdb.port+"/"+cdb.db, function(err, re
 });
 io.on('connection', function(socket) {
 	console.log('Un cliente se ha conectado');
-  socket.on('vueServer', function(data) {
-        console.log('vue -server : '+ data.great);
-        socket.emit('other','YEI');
-      });
   socket.on('deleting', function(data) {
         console.log('deleting with SOCKET : '+ data.great);
         socket.emit('messages','WOW');
@@ -43,12 +39,10 @@ io.on('connection', function(socket) {
         socket.emit('messages','WOW');
       });
   socket.on('editing', function(data, idx) {
-        postController.updatePostSocket(data,function (post) {
-          socket.emit('postEdit', idx);
+        postController.updatePostSocket(data,function (post, err) {
+          socket.emit('postEdit', {index:idx,status:!err});
         })
       });
-
-
   socket.on('disconnect', function(){
           console.log(' has disconnected'); //disconnecting automatically removes the socket from the room.
     });

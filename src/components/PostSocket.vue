@@ -64,15 +64,13 @@ export default {
     customEmit (val) {
       console.log('this method was fired by the socket server. eg: io.emit("customEmit", data)')
     },
-    messages (data) {
-      console.log('messages received ' + data)
-    },
-    other (data) {
-      console.log('other received ' + data)
-    },
     postEdit (data) {
-      console.log(data)
-      this.posts[data].editing = false
+      let post = this.posts[data.index]
+      if (data.status) {
+        post.title = this.titleDraft
+        post.description = this.descriptionDraft
+      }
+      post.editing = false
     }
   },
   created () {
@@ -105,9 +103,10 @@ export default {
       post.editing = true
     },
     updatePost (post, index) {
-      post.title = this.titleDraft
-      post.description = this.descriptionDraft
-      this.$socket.emit('editing', post, index)
+      let postCopy = JSON.parse(JSON.stringify(post))
+      postCopy.title = this.titleDraft
+      postCopy.description = this.descriptionDraft
+      this.$socket.emit('editing', postCopy, index)
     },
     deletePost (id) {
       PostsServices.deletePost(id).then(response => {

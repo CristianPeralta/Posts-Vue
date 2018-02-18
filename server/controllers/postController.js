@@ -35,13 +35,13 @@ module.exports.updatePost = function (req,res) {
 
 module.exports.updatePostSocket = function (data, cb) {
   Post.findOne({_id:data._id},function (err,post) {
-    if(err) return err;
-    if (!post) return err;
+    if(err) return cb(post, err);
+    if (!post) return cb(post, err);
     post.title = data.title;
     post.description = data.description;
     post.save(function (err, post) {
       if (err) return err;
-      cb(post);
+      return cb(post, err);
     })
   })
 }
