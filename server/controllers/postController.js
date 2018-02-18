@@ -33,6 +33,19 @@ module.exports.updatePost = function (req,res) {
   })
 }
 
+module.exports.updatePostSocket = function (data, cb) {
+  Post.findOne({_id:data._id},function (err,post) {
+    if(err) return err;
+    if (!post) return err;
+    post.title = data.title;
+    post.description = data.description;
+    post.save(function (err, post) {
+      if (err) return err;
+      cb(post);
+    })
+  })
+}
+
 module.exports.deletePost = function (req,res) {
   var data = req.params.id;
   Post.findOne({_id:data},function (err,post) {

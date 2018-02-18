@@ -19,6 +19,9 @@ const cdb = {
   db : 'PostsDB'
 };
 
+
+var postController = require('./controllers/postController');
+
 //var socketExt = io.connect('https://localhost:8080');
 
 mongoose.connect("mongodb://"+cdb.host+":"+cdb.port+"/"+cdb.db, function(err, res) {
@@ -39,9 +42,10 @@ io.on('connection', function(socket) {
         console.log('getting with SOCKET : '+ data.great);
         socket.emit('messages','WOW');
       });
-  socket.on('editing', function(data) {
-        console.log('editing with SOCKET : '+ data.great);
-        socket.emit('messages','WOW');
+  socket.on('editing', function(data, idx) {
+        postController.updatePostSocket(data,function (post) {
+          socket.emit('postEdit', idx);
+        })
       });
 
 

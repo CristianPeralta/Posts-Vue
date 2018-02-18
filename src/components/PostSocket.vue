@@ -6,7 +6,7 @@
     <br>
     <new-post></new-post>
     <ul class="list-group tasks">
-        <li v-for="post in posts" :key="post._id" class="list-group-item">
+        <li v-for="(post,index) in posts" :key="post._id" class="list-group-item">
           <template v-if="!post.editing">
               <span><b>{{ post.title }}</b></span> : <span class="description">{{ post.description }}</span>
             <div>
@@ -26,7 +26,7 @@
             </div>
             <div>
               <a>
-                  <span v-if="isEmpty(titleDraft)" @click="updatePost(post)" class="glyphicon glyphicon-ok"
+                  <span v-if="isEmpty(titleDraft)" @click="updatePost(post,index)" class="glyphicon glyphicon-ok"
                         aria-hidden="true"></span>
               </a>
               <a>
@@ -69,6 +69,12 @@ export default {
     },
     other (data) {
       console.log('other received ' + data)
+    },
+    postEdit (data) {
+      console.log(data)
+      this.posts.forEach(function (post) {
+        post.editing = false
+      })
     }
   },
   created () {
@@ -100,16 +106,10 @@ export default {
       this.descriptionDraft = post.description
       post.editing = true
     },
-    updatePost (post) {
+    updatePost (post, index) {
       post.title = this.titleDraft
       post.description = this.descriptionDraft
-      PostsServices.updatePost(post).then(() => {
-        this.$socket.emit('editing', post)
-        post.editing = false
-      }).catch(err => {
-        post.editing = false
-        console.log(err)
-      })
+      this.$socket.emit('editing', post, index)
     },
     deletePost (id) {
       PostsServices.deletePost(id).then(response => {
