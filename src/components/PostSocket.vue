@@ -72,9 +72,7 @@ export default {
     },
     postEdit (data) {
       console.log(data)
-      this.posts.forEach(function (post) {
-        post.editing = false
-      })
+      this.posts[data].editing = false
     }
   },
   created () {
