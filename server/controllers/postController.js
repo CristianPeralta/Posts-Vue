@@ -63,3 +63,13 @@ module.exports.deletePost = function (req,res) {
     })
   })
 }
+
+module.exports.deletePostSocket = function (id, cb) {
+  Post.findOne({_id:id},function (err,post) {
+    if(err) return cb(post, err);
+    if (!post) return cb(post, err);
+    post.remove(function (err) {
+      return cb(post, err);
+    })
+  })
+}

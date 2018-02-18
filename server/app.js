@@ -31,12 +31,16 @@ mongoose.connect("mongodb://"+cdb.host+":"+cdb.port+"/"+cdb.db, function(err, re
 io.on('connection', function(socket) {
 
 	console.log('A client has connected');
+
   socket.on('hai', function(data) {
         console.log('deleting with SOCKET : '+ data.great);
         socket.emit('message', 'Server Connected');
       });
-  socket.on('deleting', function(data) {
-        console.log('deleting with SOCKET : '+ data.great);
+
+  socket.on('deletePost', function(id, idx) {
+        postController.deletePostSocket(id, function (posts, err) {
+          socket.emit('postDeleted', {index:idx,ok:!err,err:err});
+        })
       });
 
   socket.on('getPosts', function() {

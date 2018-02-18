@@ -14,7 +14,7 @@
                         aria-hidden="true"></span>
               </a>
               <a>
-                  <span @click="deletePost(post._id)" class="glyphicon glyphicon-trash"
+                  <span @click="deletePost(post._id, index)" class="glyphicon glyphicon-trash"
                         aria-hidden="true"></span>
               </a>
             </div>
@@ -41,7 +41,6 @@
 </template>
 
 <script>
-import PostsServices from '@/services/PostsServices'
 import postTwo from '@/components/PostTwo.vue'
 import Vue from 'vue'
 import VueSocketio from 'vue-socket.io'
@@ -81,7 +80,14 @@ export default {
         })
         this.posts = response.data
       } else {
-        console.log(response.rr)
+        console.log(response.err)
+      }
+    },
+    postDeleted (response) {
+      if (response.ok) {
+        this.posts.splice(response.index, 1)
+      } else {
+        console.log(response.err)
       }
     }
   },
@@ -109,13 +115,8 @@ export default {
       postCopy.description = this.descriptionDraft
       this.$socket.emit('updatePost', postCopy, index)
     },
-    deletePost (id) {
-      PostsServices.deletePost(id).then(response => {
-        this.$socket.emit('deleting', id)
-        this.$router.go()
-      }).catch(err => {
-        console.log(err)
-      })
+    deletePost (id, index) {
+      this.$socket.emit('deletePost', id, index)
     },
     cancelPost (post) {
       post.editing = !post.editing
