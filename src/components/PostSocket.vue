@@ -46,6 +46,7 @@ import PostsServices from '@/services/PostsServices'
 import postTwo from '@/components/PostTwo.vue'
 import Vue from 'vue'
 import VueSocketio from 'vue-socket.io'
+Vue.use(VueSocketio, 'ws://localhost:3000')
 
 export default {
   name: 'PostsSocket',
@@ -69,9 +70,6 @@ export default {
     other (data) {
       console.log('other received ' + data)
     }
-  },
-  mounted () {
-    Vue.use(VueSocketio, 'ws://localhost:3000')
   },
   created () {
     this.getPosts()
