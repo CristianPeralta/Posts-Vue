@@ -2,7 +2,6 @@
   <div class="container">
     <h1>Posts</h1>
     <button class="btn btn-primary" @click="haiServer()" type="button" name="button">Hello Server</button>
-    <button class="btn btn-primary" @click="vueServer()" type="button" name="button">Vue Server</button>
     <br>
     <new-post></new-post>
     <ul class="list-group tasks">
@@ -64,13 +63,26 @@ export default {
     customEmit (val) {
       console.log('this method was fired by the socket server. eg: io.emit("customEmit", data)')
     },
-    postEdit (data) {
-      let post = this.posts[data.index]
-      if (data.status) {
+    message (data) {
+      console.log(data)
+    },
+    postUpdated (response) {
+      let post = this.posts[response.index]
+      if (response.ok) {
         post.title = this.titleDraft
         post.description = this.descriptionDraft
       }
       post.editing = false
+    },
+    postGet (response) {
+      if (response.ok) {
+        response.data.map(function (post) {
+          post.editing = false
+        })
+        this.posts = response.data
+      } else {
+        console.log(response.rr)
+      }
     }
   },
   created () {
@@ -78,21 +90,10 @@ export default {
   },
   methods: {
     haiServer () {
-      this.$socket.emit('editing', {great: 'Wow'})
-    },
-    vueServer () {
-      this.$socket.emit('vueServer', {great: 'Wow'})
+      this.$socket.emit('hai', {great: 'Wow'})
     },
     getPosts () {
-      PostsServices.fetchPosts().then(response => {
-        this.$socket.emit('getting', {great: 'Wow'})
-        response.data.map(function (post) {
-          post.editing = false
-        })
-        this.posts = response.data
-      }).catch(err => {
-        console.log(err)
-      })
+      this.$socket.emit('getPosts')
     },
     editPost (post) {
       this.posts.forEach(function (post) {
@@ -106,7 +107,7 @@ export default {
       let postCopy = JSON.parse(JSON.stringify(post))
       postCopy.title = this.titleDraft
       postCopy.description = this.descriptionDraft
-      this.$socket.emit('editing', postCopy, index)
+      this.$socket.emit('updatePost', postCopy, index)
     },
     deletePost (id) {
       PostsServices.deletePost(id).then(response => {

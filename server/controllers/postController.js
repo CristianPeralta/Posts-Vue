@@ -7,6 +7,12 @@ module.exports.getPosts = function (req,res) {
   }).sort({_id:-1})
 }
 
+module.exports.getPostsSocket = function (cb) {
+  Post.find({},function (err,posts) {
+    return cb(posts, err);
+  }).sort({_id:-1})
+}
+
 module.exports.addPost = function (req,res) {
   var data = req.body;
   var newPost = new Post({

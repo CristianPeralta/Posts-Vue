@@ -29,20 +29,28 @@ mongoose.connect("mongodb://"+cdb.host+":"+cdb.port+"/"+cdb.db, function(err, re
   console.log('Successful connection to database PostsDB');
 });
 io.on('connection', function(socket) {
-	console.log('Un cliente se ha conectado');
+
+	console.log('A client has connected');
+  socket.on('hai', function(data) {
+        console.log('deleting with SOCKET : '+ data.great);
+        socket.emit('message', 'Server Connected');
+      });
   socket.on('deleting', function(data) {
         console.log('deleting with SOCKET : '+ data.great);
-        socket.emit('messages','WOW');
       });
-  socket.on('getting', function(data) {
-        console.log('getting with SOCKET : '+ data.great);
-        socket.emit('messages','WOW');
-      });
-  socket.on('editing', function(data, idx) {
-        postController.updatePostSocket(data,function (post, err) {
-          socket.emit('postEdit', {index:idx,status:!err});
+
+  socket.on('getPosts', function() {
+        postController.getPostsSocket(function (posts, err) {
+          socket.emit('postGet', {data:posts,ok:!err,err:err});
         })
       });
+
+  socket.on('updatePost', function(data, idx) {
+        postController.updatePostSocket(data,function (post, err) {
+          socket.emit('postUpdated', {index:idx,ok:!err,err:err});
+        })
+      });
+
   socket.on('disconnect', function(){
           console.log(' has disconnected'); //disconnecting automatically removes the socket from the room.
     });
