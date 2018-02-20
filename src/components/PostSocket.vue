@@ -88,8 +88,8 @@ export default {
     postUpdated (response) {
       let post = this.posts[response.index]
       if (response.ok) {
-        post.title = this.titleDraft
-        post.description = this.descriptionDraft
+        post.title = response.post.title
+        post.description = response.post.description
       }
       post.editing = false
     },

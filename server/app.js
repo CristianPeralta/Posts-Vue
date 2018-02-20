@@ -39,25 +39,25 @@ io.on('connection', function(socket) {
 
   socket.on('addPost', function(data) {
         postController.addPostSocket(data, function (post, err) {
-          socket.emit('postAdded', {data:post,ok:!err,err:err});
+          io.emit('postAdded', {data:post,ok:!err,err:err});
         })
       });
 
   socket.on('deletePost', function(id, idx) {
         postController.deletePostSocket(id, function (err) {
-          socket.emit('postDeleted', {index:idx,ok:!err,err:err});
+          io.emit('postDeleted', {index:idx,ok:!err,err:err});
         })
       });
 
   socket.on('getPosts', function() {
         postController.getPostsSocket(function (posts, err) {
-          socket.emit('postGet', {data:posts,ok:!err,err:err});
+          io.emit('postGet', {data:posts,ok:!err,err:err});
         })
       });
 
   socket.on('updatePost', function(data, idx) {
         postController.updatePostSocket(data,function (post, err) {
-          socket.emit('postUpdated', {index:idx,ok:!err,err:err});
+          io.emit('postUpdated', {index:idx,post:post,ok:!err,err:err});
         })
       });
 
