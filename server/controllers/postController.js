@@ -1,10 +1,12 @@
 var Post = require('../models/Post');
 
-module.exports.getPosts = function (req,res) {
-  Post.find({},function (err,posts) {
-    if(err) return res.json(503);
+module.exports.getPosts = async (req, res) => {
+  try {
+    const posts = await Post.find({}).sort({_id: -1});
     return res.json(posts);
-  }).sort({_id:-1})
+  } catch (error) {
+    if(error) res.json(503);
+  }
 }
 
 module.exports.getPostsSocket = function (cb) {
