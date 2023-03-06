@@ -15,16 +15,18 @@ module.exports.getPostsSocket = function (cb) {
   }).sort({_id:-1})
 }
 
-module.exports.addPost = function (req,res) {
-  var data = req.body;
-  var newPost = new Post({
-    title: data.title,
-    description:data.description
-  });
-  newPost.save(function (err,post) {
-    if (err) return res.status(500).send(err);
+module.exports.addPost = async (req, res) => {
+  try {
+    const data = req.body;
+    const newPost = new Post({
+      title: data.title,
+      description:data.description
+    });
+    const post = await newPost.save();
     return res.json(post);
-  })
+  } catch (error) {
+    if (error) res.status(500).send(error);
+  }
 }
 
 module.exports.addPostSocket = function (data, cb) {
