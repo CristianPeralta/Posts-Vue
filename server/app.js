@@ -1,12 +1,9 @@
 var express = require('express');
-var path = require('path');
-var favicon = require('serve-favicon');
 var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var mongoose = require('mongoose');
 var cors = require('cors');
-var http = require('http');
 var app = express();
 var server = app.listen(3000);
 var io = require('socket.io').listen(server);
@@ -19,15 +16,21 @@ const cdb = {
   db : 'PostsDB'
 };
 
-
 var postController = require('./controllers/postController');
 
 //var socketExt = io.connect('https://localhost:8080');
 
-mongoose.connect("mongodb://"+cdb.host+":"+cdb.port+"/"+cdb.db, function(err, res) {
-  if(err) throw err;
-  console.log('Successful connection to database PostsDB');
+mongoose.connect("mongodb://"+cdb.host+":"+cdb.port+"/"+cdb.db, {
+  useNewUrlParser: true,
+  useUnifiedTopology: true
 });
+
+const db = mongoose.connection;
+db.on('error', console.error.bind(console, 'Error de conexión:'));
+db.once('open', function() {
+  console.log('Conexión exitosa a la base de datos.');
+});
+
 io.on('connection', function(socket) {
 
 	console.log('A client has connected');
@@ -97,6 +100,7 @@ app.use(function(err, req, res, next) {
   // render the error page
   res.status(err.status || 500);
   res.render('error');
+  res.status(500).send(err);
 });
 
 module.exports = app;
